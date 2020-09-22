@@ -51,8 +51,8 @@ def scrape():
 		chrome_options.add_argument('--dns-prefetch-disable');
 		chrome_options.add_argument('--disable-gpu');
 
-		# path = '/home/admin/scraper/chromedriver'
-		path = '/Users/tmilicevic/Documents/python_scraper/chromedriver'
+		path = '/home/admin/scraper/chromedriver'
+		# path = '/Users/tmilicevic/Documents/python_scraper/chromedriver'
 		driver = webdriver.Chrome(path, options=chrome_options)
 
 		retailers = ['amazon', 'walmart', 'target', 'kroger', 'publix', 'albertsons', 'instacart']
