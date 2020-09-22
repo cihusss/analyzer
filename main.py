@@ -106,6 +106,7 @@ def scrape():
 
 				# get and populate scrape_data
 				scrapes = driver.find_elements_by_class_name('search-result-gridview-item-wrapper')
+				global total_results
 				total_results = len(scrapes)
 				for idx, scrape in enumerate(scrapes):
 					pname = scrape.find_element_by_css_selector('a.product-title-link > span').text
@@ -122,14 +123,14 @@ def scrape():
 			# wrap up
 			finally:
 				driver.quit()
-				outputData(parameters, scrape_data, total_results)
+				outputData(parameters, scrape_data)
 
 		# already checked if retailer is supported
 		else:
 			None
 			# print('Non-supported retailer')
 
-	def outputData(parameters, scrape_data, total_results):
+	def outputData(parameters, scrape_data):
 		print('Calculating data...')
 		
 		# write scrape_data into a local data.json file
