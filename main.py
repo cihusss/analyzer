@@ -202,7 +202,7 @@ def scrape():
 		body = 'This is an email with attachment sent from Python'
 		sender_email = 'cihusss@frontier.com'
 		receiver_email = 'cihusss@gmail.com'
-		# password = input('Type your password and press enter:')
+		password = input('Type your password and press enter:')
 
 		# Create a multipart message and set headers
 		message = MIMEMultipart()
