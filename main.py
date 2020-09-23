@@ -173,7 +173,7 @@ def scrape():
 		# throw & print errors
 		except Exception as e:
 			print('Output function error: ' + str(e))
-			return
+			sys.exit(str(e))
 		# print calculated output to term
 		finally:
 			print('-' * 60)
@@ -202,7 +202,7 @@ def scrape():
 			# output_data = scrape_data
 
 			# write res_data into a local data.json file
-			with open(f'res_data_{fileStamp}.json', 'w', encoding='utf-8') as f:
+			with open(f'res_data/res_data_{fileStamp}.json', 'w', encoding='utf-8') as f:
 				json.dump(calc_data, f, ensure_ascii=False, indent=4)
 
 			output_data = calc_data
