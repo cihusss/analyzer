@@ -204,9 +204,9 @@ def scrape():
 				json.dump(calc_data, f, ensure_ascii=False, indent=4)
 
 			output_data = calc_data
-			sendEmail()
+			sendEmail(fileStamp)
 
-	def sendEmail():
+	def sendEmail(fileStamp):
 		smtp_server = 'smtp.frontier.com'
 		subject = 'An email with attachment from Python'
 		body = 'This is an email with attachment sent from Python'
