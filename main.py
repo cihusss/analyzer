@@ -150,7 +150,8 @@ def scrape():
 		try:
 			global output_data
 			dateTimeObj = datetime.now()
-			timestampStr = dateTimeObj.strftime("%d-%b-%Y (%H:%M:%S.%f)")
+			# timestampStr = dateTimeObj.strftime("%d-%b-%Y (%H:%M:%S.%f)")
+			timestampStr = dateTimeObj.strftime("%d-%b-%Y_%H:%M:%S")
 			fileStamp = dateTimeObj.strftime('%H%M%S%f')
 			calc_data = {}
 			price_sum = 0
@@ -172,6 +173,7 @@ def scrape():
 		# throw & print errors
 		except Exception as e:
 			print('Output function error: ' + str(e))
+			return
 		# print calculated output to term
 		finally:
 			print('-' * 60)
