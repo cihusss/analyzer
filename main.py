@@ -227,7 +227,7 @@ def scrape():
 		# add body to email
 		message.attach(MIMEText(body, 'plain'))
 
-		filename = f'output/res_data_{fileStamp}.json'
+		filename = f'res_data_{fileStamp}.json'
 		dir_path = 'output'
 		filepath = os.path.join(dir_path, filename)
 
