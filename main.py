@@ -11,6 +11,8 @@ import sys
 
 app = Flask(__name__)
 
+total_results = 10
+
 class Params:
 	def __init__(self):
 		self.category = 'category'
@@ -51,7 +53,8 @@ def scrape():
 		chrome_options.add_argument('--dns-prefetch-disable');
 		chrome_options.add_argument('--disable-gpu');
 
-		path = '/home/admin/scraper/chromedriver'
+		path = '/usr/bin/chromedriver'
+                # path = '/home/admin/scraper/chromedriver'
 		# path = '/Users/tmilicevic/Documents/python_scraper/chromedriver'
 		driver = webdriver.Chrome(path, options=chrome_options)
 
@@ -190,7 +193,7 @@ def scrape():
 	setup()
 
 	# return 'Successful scrape!'
-	return output_data
+	return json.dumps(output_data, indent = 4)
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', port=7777, debug=True)
