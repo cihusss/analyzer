@@ -202,7 +202,7 @@ def scrape():
 			# output_data = scrape_data
 
 			# write res_data into a local data.json file
-			with open(f'res_data/res_data_{fileStamp}.json', 'w', encoding='utf-8') as f:
+			with open(f'output/res_data_{fileStamp}.json', 'w', encoding='utf-8') as f:
 				json.dump(calc_data, f, ensure_ascii=False, indent=4)
 
 			output_data = calc_data
@@ -226,7 +226,7 @@ def scrape():
 		# add body to email
 		message.attach(MIMEText(body, 'plain'))
 
-		filename = f'res_data_{fileStamp}.json' # in same directory as script
+		filename = f'output/res_data_{fileStamp}.json' # in same directory as script
 
 		# open a file in binary mode
 		with open(filename, 'rb') as attachment:
