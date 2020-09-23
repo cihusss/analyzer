@@ -13,6 +13,7 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -148,6 +149,9 @@ def scrape():
 		# perform calculations
 		try:
 			global output_data
+			dateTimeObj = datetime.now()
+			timestampStr = dateTimeObj.strftime("%d-%b-%Y (%H:%M:%S.%f)")
+			fileStamp = dateTimeObj.strftime('%H%M%S%f')
 			calc_data = {}
 			price_sum = 0
 			tot_pos = 0
@@ -183,6 +187,7 @@ def scrape():
 
 			# populate calc_data dictionary
 			calc_data.update({
+				'timestamp' : timestampStr,
 				'retailer' : parameters['retailer'],
 				'zipcode' : parameters['zipcode'],
 				'category' : parameters['category'],
@@ -195,7 +200,7 @@ def scrape():
 			# output_data = scrape_data
 
 			# write res_data into a local data.json file
-			with open('res_data.json', 'w', encoding='utf-8') as f:
+			with open(f'res_data_{fileStamp}.json', 'w', encoding='utf-8') as f:
 				json.dump(calc_data, f, ensure_ascii=False, indent=4)
 
 			output_data = calc_data
