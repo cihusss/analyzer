@@ -224,7 +224,7 @@ def scrape():
 		# Add body to email
 		message.attach(MIMEText(body, 'plain'))
 
-		filename = 'res_data.json'  # In same directory as script
+		filename = f'res_data_{fileStamp}.json'  # In same directory as script
 
 		# Open PDF file in binary mode
 		with open(filename, 'rb') as attachment:
