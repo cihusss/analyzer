@@ -193,8 +193,13 @@ def scrape():
 			})
 
 			# output_data = scrape_data
+
+			# write res_data into a local data.json file
+			with open('res_data.json', 'w', encoding='utf-8') as f:
+				json.dump(calc_data, f, ensure_ascii=False, indent=4)
+
 			output_data = calc_data
-			sendEmail()
+			# sendEmail()
 
 	def sendEmail():
 		smtp_server = 'smtp.frontier.com'
@@ -214,7 +219,7 @@ def scrape():
 		# Add body to email
 		message.attach(MIMEText(body, 'plain'))
 
-		filename = 'data.json'  # In same directory as script
+		filename = 'res_data.json'  # In same directory as script
 
 		# Open PDF file in binary mode
 		with open(filename, 'rb') as attachment:
