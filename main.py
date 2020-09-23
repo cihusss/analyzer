@@ -226,10 +226,12 @@ def scrape():
 		# add body to email
 		message.attach(MIMEText(body, 'plain'))
 
-		filename = f'output/res_data_{fileStamp}.json' # in same directory as script
+		filename = f'output/res_data_{fileStamp}.json'
+		dir_path = 'output'
+		filepath = os.path.join(dir_path, filename)
 
 		# open a file in binary mode
-		with open(filename, 'rb') as attachment:
+		with open(filepath, 'rb') as attachment:
 		    # add file as application/octet-stream
 		    # email client can usually download this automatically as attachment
 		    part = MIMEBase('application', 'octet-stream')
