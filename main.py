@@ -199,7 +199,7 @@ def scrape():
 				json.dump(calc_data, f, ensure_ascii=False, indent=4)
 
 			output_data = calc_data
-			# sendEmail()
+			sendEmail()
 
 	def sendEmail():
 		smtp_server = 'smtp.frontier.com'
