@@ -197,12 +197,12 @@ def scrape():
 			sendEmail()
 
 	def sendEmail():
-		smtp_server = 'smtp.gmail.com'
+		smtp_server = 'smtp.frontier.com'
 		subject = 'An email with attachment from Python'
 		body = 'This is an email with attachment sent from Python'
-		sender_email = 'cihusss@gmail.com'
+		sender_email = 'cihusss@frontier.com'
 		receiver_email = 'cihusss@gmail.com'
-		password = input('Type your password and press enter:')
+		# password = input('Type your password and press enter:')
 
 		# Create a multipart message and set headers
 		message = MIMEMultipart()
