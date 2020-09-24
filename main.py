@@ -122,7 +122,8 @@ def scrape():
 					pname = scrape.find_element_by_css_selector('a.product-title-link > span').text
 					pwhole = scrape.find_element_by_css_selector('span.price-characteristic').text
 					pfraction = scrape.find_element_by_css_selector('span.price-mantissa').text
-					if (pname.find(parameters['product']) != -1):
+					# if (pname.find(parameters['product']) != -1):
+					if (pname.search(parameters['product'], re.IGNORECASE)):
 						scrape_data.update({idx: {'name' : pname, 'price' : pwhole, 'fraction' : pfraction}})
 					else:
 						None
