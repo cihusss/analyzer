@@ -232,4 +232,4 @@ def sendEmail(fileStamp):
 	    server.login(sender_email, password)
 	    server.sendmail(sender_email, receiver_email, text)
 
-	 print('email SENT!!!')
+	print('email SENT!!!')
