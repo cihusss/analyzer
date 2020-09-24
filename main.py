@@ -114,8 +114,11 @@ def scrape():
 				wmquery.send_keys(parameters['category'])
 				wmquery.send_keys(Keys.RETURN)
 
+				driver.implicitly_wait(3)
+
 				# get and populate scrape_data
 				scrapes = driver.find_elements_by_class_name('search-result-gridview-item-wrapper')
+
 				global total_results
 				total_results = len(scrapes)
 				for idx, scrape in enumerate(scrapes):
