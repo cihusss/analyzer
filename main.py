@@ -115,6 +115,7 @@ def scrape():
 				wmquery.send_keys(Keys.RETURN)
 
 				driver.implicitly_wait(3)
+				driver.save_screenshot('screenshot.png')
 
 				# get and populate scrape_data
 				scrapes = driver.find_elements_by_class_name('search-result-gridview-item-wrapper')
