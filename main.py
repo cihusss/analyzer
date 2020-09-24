@@ -211,7 +211,8 @@ def scrape():
 				json.dump(calc_data, f, ensure_ascii=False, indent=4)
 
 			output_data = calc_data
-			sendEmail(fileStamp)
+			if (avg_position != 0):
+				sendEmail(fileStamp)
 
 	def sendEmail(fileStamp):
 		smtp_server = 'smtp.frontier.com'
