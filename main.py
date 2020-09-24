@@ -218,7 +218,7 @@ def scrape():
 		subject = 'Scrape Data from Python'
 		body = 'This is an email with attachment sent from Python'
 		sender_email = 'cihusss@frontier.com'
-		receiver_email = 'cihusss@gmail.com'
+		receiver_email = 'dash@xal.rocks'
 		password = input('Type your password and press enter:')
 
 		# create a multipart message and set headers
