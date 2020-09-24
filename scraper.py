@@ -231,3 +231,5 @@ def sendEmail(fileStamp):
 	with smtplib.SMTP_SSL(smtp_server, 465, context=context) as server:
 	    server.login(sender_email, password)
 	    server.sendmail(sender_email, receiver_email, text)
+
+	 print('email SENT!!!')
