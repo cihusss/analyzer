@@ -4,8 +4,6 @@ import json
 
 app = Flask(__name__)
 
-total_results = 10
-
 class Params:
 	def __init__(self):
 		self.category = 'category'
@@ -23,7 +21,7 @@ def home():
 		p.product = request.form.get('product')
 		p.zipcode = request.form.get('zipcode')
 
-		print('printing Params class ' + p.category)
+		print(f'printing Params class {p.category}')
 
 		run()
 
@@ -42,4 +40,4 @@ def scrape():
 	# return json.dumps(scraper.output_data, indent = 4)
 
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', port=7777, debug=True)
+	app.run(host='0.0.0.0', port=9000, debug=True)

@@ -16,11 +16,13 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from datetime import datetime
 
+total_results = 0
+
 # set up the browser and get url parameters
 def setup():
 	chrome_options = Options()
 	chrome_options.add_argument('enable-automation');
-	chrome_options.add_argument('--headless');
+	# chrome_options.add_argument('--headless');
 	chrome_options.add_argument('--window-size=1920,1080');
 	chrome_options.add_argument('--no-sandbox');
 	chrome_options.add_argument('--disable-extensions');
@@ -28,8 +30,8 @@ def setup():
 	chrome_options.add_argument('--disable-gpu');
 
 	# path = '/usr/bin/chromedriver'
-	path = '/home/admin/scraper/chromedriver'
-	# path = '/Users/tmilicevic/Documents/python_scraper/chromedriver'
+	# path = '/home/admin/scraper/chromedriver'
+	path = '/Users/tmilicevic/Documents/python_scraper/chromedriver'
 	driver = webdriver.Chrome(path, options=chrome_options)
 
 	retailers = ['amazon', 'walmart', 'target', 'kroger', 'publix', 'albertsons', 'instacart']
@@ -62,32 +64,36 @@ def navigateSite(driver, parameters, scrape_data):
 
 	# walmart routine
 	if (parameters['retailer'].find('walmart') != -1):
-		print('Navigating: ' + parameters['retailer'])
+		print(f'Navigating: {parameters["retailer"]}')
 		
 		try:
 			wmclick = WebDriverWait(driver, 10).until(
 				EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div/div/div[1]/section/div[5]/div[1]/div[3]/button"))
 			)
 			wmclick.click()
-			driver.implicitly_wait(1)
 			wminput = driver.find_element_by_xpath('/html/body/div[1]/div/div/div[1]/section/div[4]/div[1]/div/div[2]/div[1]/div/div[1]/input')
 			wminput.send_keys(parameters['zipcode'])
 			wminput.send_keys(Keys.TAB)
 			wminput.send_keys(Keys.RETURN)
 			wmcontinue = driver.find_element_by_xpath('//*[@id="next-day-location-modal"]/div[1]/div/div[2]/div[2]/div/button[1]/span')
-			wmcontinue.click()
+			time.sleep(1)
+			# wmcontinue.click()
 
 			wmquery = driver.find_element_by_id('global-search-input')
+			time.sleep(1)
 			wmquery.send_keys(parameters['category'])
+			time.sleep(1)
 			wmquery.send_keys(Keys.RETURN)
+			time.sleep(1)
 
-			driver.implicitly_wait(3)
 			driver.save_screenshot('screenshot.png')
 
 			# get and populate scrape_data
+
 			scrapes = driver.find_elements_by_class_name('search-result-gridview-item-wrapper')
 
 			global total_results
+			total_results = 1
 			total_results = len(scrapes)
 			for idx, scrape in enumerate(scrapes):
 				pname = scrape.find_element_by_css_selector('a.product-title-link > span').text
@@ -98,11 +104,13 @@ def navigateSite(driver, parameters, scrape_data):
 				pfraction = scrape.find_element_by_css_selector('span.price-mantissa').text
 				if (pname.find(pinput) != -1):
 					scrape_data.update({idx: {'name' : pname, 'price' : pwhole, 'fraction' : pfraction}})
+					print('MATCH!!!.')
 				else:
-					None
+					print('no match...')
 		# print errors
 		except Exception as e:
-			print('Navigate function error: ' + str(e))
+			print(f'Navigate function error: {str(e)}')
+			# sys.exit()
 
 		# wrap up
 		finally:
@@ -147,19 +155,19 @@ def outputData(parameters, scrape_data):
 
 	# throw & print errors
 	except Exception as e:
-		print('Output function error: ' + str(e))
-		sys.exit(str(e))
+		print(f'Output function error: {str(e)}')
+		# sys.exit(str(e))
 	# print calculated output to term
 	finally:
 		print('-' * 60)
-		print('RETAILER: ' + parameters['retailer'])
-		print('ZIP CODE: ' + parameters['zipcode'])
-		print('CATEGORY: ' + parameters['category'])
-		print('TOTAL ' + parameters['category'] + ' on SHELF: ' + str(total_results))
-		print('TOTAL ' + parameters['product'] + ' ' + parameters['category'] +' on SHELF: ' + matched_results)
-		print(parameters['product'] + ' BRAND SHARE of SHELF: ' + str(shelf_share) + '%')
-		print('AVERAGE ' + parameters['product'] + ' PRODUCT PRICE: $' + str(avg_price))
-		print('AVERAGE SHELF POSITION: ' + str(avg_position))
+		print(f'RETAILER: {parameters["retailer"]}')
+		print(f'ZIP CODE: {parameters["zipcode"]}')
+		print(f'CATEGORY: {parameters["category"]}')
+		print(f'TOTAL {parameters["category"]} on SHELF: {str(total_results)}')
+		print(f'TOTAL {parameters["product"]} {parameters["category"]} on SHELF: {matched_results}')
+		print(f'{parameters["product"]} BRAND SHARE of SHELF: {str(shelf_share)}%')
+		print(f'AVERAGE {parameters["product"]} PRODUCT PRICE: ${str(avg_price)}')
+		print(f'AVERAGE SHELF POSITION: {str(avg_position)}')
 		print('-' * 60)
 
 		# populate calc_data dictionary
@@ -182,7 +190,8 @@ def outputData(parameters, scrape_data):
 
 		output_data = calc_data
 		if (avg_position != 0):
-			sendEmail(fileStamp)
+			# sendEmail(fileStamp)
+			print('sending FAKE email')
 
 def sendEmail(fileStamp):
 	smtp_server = 'smtp.frontier.com'
