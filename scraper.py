@@ -16,13 +16,16 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from datetime import datetime
 
-total_results = 0
+# total_results = 0
+
+# global calc_data
+calc_data = {}
 
 # set up the browser and get url parameters
 def setup():
 	chrome_options = Options()
 	chrome_options.add_argument('enable-automation');
-	# chrome_options.add_argument('--headless');
+	chrome_options.add_argument('--headless');
 	chrome_options.add_argument('--window-size=1920,1080');
 	chrome_options.add_argument('--no-sandbox');
 	chrome_options.add_argument('--disable-extensions');
@@ -32,31 +35,42 @@ def setup():
 	# path = '/usr/bin/chromedriver'
 	# path = '/home/admin/scraper/chromedriver'
 	path = '/Users/tmilicevic/Documents/python_scraper/chromedriver'
-	driver = webdriver.Chrome(path, options=chrome_options)
+	# driver = webdriver.Chrome(path, options=chrome_options)
 
 	retailers = ['amazon', 'walmart', 'target', 'kroger', 'publix', 'albertsons', 'instacart']
-	scrape_data = {}
+	# scrape_data = {}
 	parameters = {}
 	retailer = 'https://www.' + request.args.get('retailer') + '.com'
-	zipcode = request.args.get('zipcode')
+	# zipcode = request.args.get('zipcode')
+	zipcode = ['80002', '90210', '60007', '33716']
+	# zipcode = ['33716']
 	category = request.args.get('category')
 	product = request.args.get('product')
 
-	# store url parameters/variables in parameters scrape_data
-	for variable in ['retailer', 'zipcode', 'category', 'product']:
-		parameters[variable] = eval(variable)
-	
-	# check if retailer is supported
-	res = [ele for ele in retailers if(ele in request.args.get('retailer'))] 
+	for idx, z in enumerate(zipcode):
+		print(z)
+		driver = webdriver.Chrome(path, options=chrome_options)
+		scrape_data = {}
 
-	# navigate if retailer is suppored
-	if res:
-		print('Supported retailer... moving along...')
-		navigateSite(driver, parameters, scrape_data)
-	else:
-		print('Unsupported retailer... stopping the scrape...')
-		driver.quit()
+		# populate parameters dictionary
+		for v in ['retailer', 'zipcode[idx]', 'category', 'product']:
+			parameters[v] = eval(v)
+		
+		parameters['zipcode'] = parameters.pop('zipcode[idx]') 
+		print(parameters)
 
+		# check if retailer is supported
+		res = [ele for ele in retailers if(ele in request.args.get('retailer'))] 
+
+		# navigate if retailer is suppored
+		if res:
+			print('Supported retailer... moving along...')
+			navigateSite(driver, parameters, scrape_data)
+		else:
+			print('Unsupported retailer... stopping the scrape...')
+			driver.quit()
+  
+	print('ALL DONE HERE!')
 
 def navigateSite(driver, parameters, scrape_data):
 	
@@ -89,11 +103,15 @@ def navigateSite(driver, parameters, scrape_data):
 			driver.save_screenshot('screenshot.png')
 
 			# get and populate scrape_data
+			
+			try:
+				scrapes = driver.find_elements_by_class_name('search-result-gridview-item-wrapper')
+			finally:
+				print(f'SCRAPES LENGTH {len(scrapes)}')
+				print('SCRAPES FAILED')
 
-			scrapes = driver.find_elements_by_class_name('search-result-gridview-item-wrapper')
-
-			global total_results
-			total_results = 1
+			# global total_results
+			# total_results = 0
 			total_results = len(scrapes)
 			for idx, scrape in enumerate(scrapes):
 				pname = scrape.find_element_by_css_selector('a.product-title-link > span').text
@@ -106,7 +124,8 @@ def navigateSite(driver, parameters, scrape_data):
 					scrape_data.update({idx: {'name' : pname, 'price' : pwhole, 'fraction' : pfraction}})
 					print('MATCH!!!.')
 				else:
-					print('no match...')
+					None
+					# print('no match...')
 		# print errors
 		except Exception as e:
 			print(f'Navigate function error: {str(e)}')
@@ -115,14 +134,14 @@ def navigateSite(driver, parameters, scrape_data):
 		# wrap up
 		finally:
 			driver.quit()
-			outputData(parameters, scrape_data)
+			outputData(parameters, scrape_data, total_results)
 
 	# already checked if retailer is supported
 	else:
 		None
 		# print('Non-supported retailer')
 
-def outputData(parameters, scrape_data):
+def outputData(parameters, scrape_data, total_results):
 	print('Calculating data...')
 	
 	# write scrape_data into a local data.json file
@@ -132,11 +151,11 @@ def outputData(parameters, scrape_data):
 	# perform calculations
 	try:
 		global output_data
+		# calc_data = {}
 		dateTimeObj = datetime.now()
 		# timestampStr = dateTimeObj.strftime("%d-%b-%Y (%H:%M:%S.%f)")
 		timestampStr = dateTimeObj.strftime("%d-%b-%Y-%H-%M-%S")
 		fileStamp = dateTimeObj.strftime('%H%M%S%f')
-		calc_data = {}
 		price_sum = 0
 		tot_pos = 0
 		avg_price = 0
@@ -171,7 +190,7 @@ def outputData(parameters, scrape_data):
 		print('-' * 60)
 
 		# populate calc_data dictionary
-		calc_data.update({
+		calc_data.update({parameters['zipcode']:{
 			'timestamp' : timestampStr,
 			'retailer' : parameters['retailer'],
 			'zipcode' : parameters['zipcode'],
@@ -180,12 +199,13 @@ def outputData(parameters, scrape_data):
 			'avg_price' : avg_price,
 			'avg_position' : avg_position,
 			'shelf_share' : shelf_share + '%'
-		})
+		}})
 
 		# output_data = scrape_data
 
 		# write res_data into a local data.json file
-		with open(f'output/res_data_{fileStamp}.json', 'w', encoding='utf-8') as f:
+		# with open(f'output/res_data_{fileStamp}.json', 'w', encoding='utf-8') as f:
+		with open('output/res_data.json', 'w', encoding='utf-8') as f:
 			json.dump(calc_data, f, ensure_ascii=False, indent=4)
 
 		output_data = calc_data
