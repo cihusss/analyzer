@@ -42,8 +42,7 @@ def setup():
 	parameters = {}
 	retailer = 'https://www.' + request.args.get('retailer') + '.com'
 	# zipcode = request.args.get('zipcode')
-	zipcode = ['80002', '90210', '60007', '33716']
-	# zipcode = ['33716']
+	zipcode = ['80002', '90210', '60007', '33716', '33603', '70032', '75001', '94016', '80031', '10017', '29401']
 	category = request.args.get('category')
 	product = request.args.get('product')
 
@@ -110,9 +109,10 @@ def navigateSite(driver, parameters, scrape_data):
 				print(f'SCRAPES LENGTH {len(scrapes)}')
 				print('SCRAPES FAILED')
 
-			# global total_results
-			# total_results = 0
+			global total_results
+			total_results = 0
 			total_results = len(scrapes)
+			print(f'PRINTING TOTAL RESULTS: {total_results}')
 			for idx, scrape in enumerate(scrapes):
 				pname = scrape.find_element_by_css_selector('a.product-title-link > span').text
 				pname = pname.lower()
@@ -122,7 +122,7 @@ def navigateSite(driver, parameters, scrape_data):
 				pfraction = scrape.find_element_by_css_selector('span.price-mantissa').text
 				if (pname.find(pinput) != -1):
 					scrape_data.update({idx: {'name' : pname, 'price' : pwhole, 'fraction' : pfraction}})
-					print('MATCH!!!.')
+					# print('MATCH!!!.')
 				else:
 					None
 					# print('no match...')
@@ -205,8 +205,9 @@ def outputData(parameters, scrape_data, total_results):
 
 		# write res_data into a local data.json file
 		# with open(f'output/res_data_{fileStamp}.json', 'w', encoding='utf-8') as f:
-		with open('output/res_data.json', 'w', encoding='utf-8') as f:
-			json.dump(calc_data, f, ensure_ascii=False, indent=4)
+		if total_results:
+			with open('output/res_data.json', 'w', encoding='utf-8') as f:
+				json.dump(calc_data, f, ensure_ascii=False, indent=4)
 
 		output_data = calc_data
 		if (avg_position != 0):

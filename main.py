@@ -1,5 +1,5 @@
 from flask import Flask, escape, request, render_template
-import scraper
+import skugrind
 import json
 
 app = Flask(__name__)
@@ -31,13 +31,13 @@ def home():
 def run():
 	print ('Im running here`')
 
-@app.route('/scrape', methods = ['GET', 'POST'])
+@app.route('/skugrind', methods = ['GET', 'POST'])
 def scrape():
 
-	scraper.setup()
+	skugrind.setup()
 
 	return 'Successful scrape!'
 	# return json.dumps(scraper.output_data, indent = 4)
 
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', port=9000, debug=True)
+	app.run(host='0.0.0.0', port=7777, debug=True)
