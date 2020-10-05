@@ -1,3 +1,5 @@
 lsKey.pem
 data.json
 chromedriver
+output/
+__pycache__
