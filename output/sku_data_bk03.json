@@ -1,0 +1,189 @@
+{
+    "80002": {
+        "amazon": {
+            "price": "$1.48",
+            "delivery": "FREE 2-hour delivery on orders over $35.00 with Prime",
+            "pickup": "Pickup not available"
+        },
+        "walmart": {
+            "price": "$1.48",
+            "delivery": "Delivery not available",
+            "pickup": "Free pickup today, In stock at Arvada, 9400 Ralston Road"
+        },
+        "target": {
+            "price": "$1.79",
+            "delivery": "Same Day Delivery, Free with membership or $9.99/order",
+            "pickup": "Ready within 4 hours for pickup inside the store. Arvada South"
+        }
+    },
+    "90210": {
+        "amazon": {
+            "price": "null",
+            "delivery": "null",
+            "pickup": "null"
+        },
+        "walmart": {
+            "price": "$1.77",
+            "delivery": "Delivery not available",
+            "pickup": "Free pickup today, In stock at Burbank, 1301 N Victory Pl"
+        },
+        "target": {
+            "price": "$1.79",
+            "delivery": "Same Day Delivery, Free with membership or $9.99/order",
+            "pickup": "Ready within 4 hours for pickup inside the store. LA Beverly"
+        }
+    },
+    "60007": {
+        "amazon": {
+            "price": "$1.48",
+            "delivery": "FREE 2-hour delivery on orders over $35.00 with Prime",
+            "pickup": "Pickup not available"
+        },
+        "walmart": {
+            "price": "$1.77",
+            "delivery": "Delivery not available",
+            "pickup": "Free pickup today, In stock at Elk Grove Village, 801 Meacham Rd"
+        },
+        "target": {
+            "price": "$1.79",
+            "delivery": "Same Day Delivery, Free with membership or $9.99/order",
+            "pickup": "Ready within 4 hours for pickup inside the store. Wood Dale"
+        }
+    },
+    "33716": {
+        "amazon": {
+            "price": "$1.48",
+            "delivery": "FREE 2-hour delivery on orders over $35.00 with Prime",
+            "pickup": "Pickup not available"
+        },
+        "walmart": {
+            "price": "$1.48",
+            "delivery": "Delivery not available",
+            "pickup": "Free pickup today, In stock at Pinellas Park, 8001 Us Highway 19 N"
+        },
+        "target": {
+            "price": "$1.79",
+            "delivery": "Same Day Delivery, Free with membership or $9.99/order",
+            "pickup": "Ready within 4 hours for pickup inside the store. St Petersburg Gateway"
+        }
+    },
+    "33603": {
+        "amazon": {
+            "price": "$1.48",
+            "delivery": "FREE 2-hour delivery on orders over $35.00 with Prime",
+            "pickup": "Pickup not available"
+        },
+        "walmart": {
+            "price": "$1.48",
+            "delivery": "Delivery not available",
+            "pickup": "Free pickup today, In stock at Tampa, 1720 E Hillsborough Ave"
+        },
+        "target": {
+            "price": "$1.79",
+            "delivery": "Same Day Delivery, Free with membership or $9.99/order",
+            "pickup": "Ready within 4 hours for pickup inside the store. Tampa Central Walter's Crossing"
+        }
+    },
+    "70032": {
+        "amazon": {
+            "price": "null",
+            "delivery": "null",
+            "pickup": "null"
+        },
+        "walmart": {
+            "price": "$1.48",
+            "delivery": "Delivery not available",
+            "pickup": "Free pickup today, In stock at Chalmette, 8101 W Judge Perez Dr"
+        },
+        "target": {
+            "price": "$1.79",
+            "delivery": "Same Day Delivery, Free with membership or $9.99/order",
+            "pickup": "Ready within 4 hours for pickup inside the store. Harvey"
+        }
+    },
+    "75001": {
+        "amazon": {
+            "price": "$1.48",
+            "delivery": "FREE 2-hour delivery on orders over $35.00 with Prime",
+            "pickup": "Pickup not available"
+        },
+        "walmart": {
+            "price": "$1.48",
+            "delivery": "Delivery not available",
+            "pickup": "Free pickup today, In stock at Dallas, 15220 Montfort Rd"
+        },
+        "target": {
+            "price": "$1.79",
+            "delivery": "Same Day Delivery, Free with membership or $9.99/order",
+            "pickup": "Ready within 4 hours for pickup inside the store. Addison"
+        }
+    },
+    "94016": {
+        "amazon": {
+            "price": "null",
+            "delivery": "null",
+            "pickup": "null"
+        },
+        "walmart": {
+            "price": "$1.77",
+            "delivery": "Delivery not available",
+            "pickup": "Free pickup today, In stock at San Leandro, 15555 Hesperian Blvd"
+        },
+        "target": {
+            "price": "$1.79",
+            "delivery": "Same Day Delivery, Free with membership or $9.99/order",
+            "pickup": "Edit store San Francisco South"
+        }
+    },
+    "80031": {
+        "amazon": {
+            "price": "$1.48",
+            "delivery": "FREE 2-hour delivery on orders over $35.00 with Prime",
+            "pickup": "Pickup not available"
+        },
+        "walmart": {
+            "price": "$1.48",
+            "delivery": "Delivery not available",
+            "pickup": "Free pickup today, In stock at Westminster, 9499 Sheridan Blvd"
+        },
+        "target": {
+            "price": "$1.79",
+            "delivery": "Same Day Delivery, Free with membership or $9.99/order",
+            "pickup": "Ready within 4 hours for pickup inside the store. Westminster"
+        }
+    },
+    "10017": {
+        "amazon": {
+            "price": "null",
+            "delivery": "null",
+            "pickup": "null"
+        },
+        "walmart": {
+            "price": "$1.48",
+            "delivery": "Delivery not available",
+            "pickup": "Free pickup today, In stock at Secaucus, 400 Park Pl"
+        },
+        "target": {
+            "price": "$1.79",
+            "delivery": "Same Day Delivery, Free with membership or $9.99/order",
+            "pickup": "Limited stock at Lower East Side Grand and Clinton\nCheck other stores\nNot eligible for Order Pickup / Drive up\nAisle A16 Kips Bay"
+        }
+    },
+    "29401": {
+        "amazon": {
+            "price": "null",
+            "delivery": "null",
+            "pickup": "null"
+        },
+        "walmart": {
+            "price": "$1.48",
+            "delivery": "Delivery not available",
+            "pickup": "Free pickup today, In stock at Charleston, 1231 Folly Rd"
+        },
+        "target": {
+            "price": "$1.79",
+            "delivery": "Same Day Delivery, Free with membership or $9.99/order",
+            "pickup": "Ready within 4 hours for pickup inside the store. Charleston South"
+        }
+    }
+}

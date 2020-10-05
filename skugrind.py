@@ -11,13 +11,11 @@ import json
 import sys
 from datetime import datetime
 
-
-
 # set up the browser and get url parameters
 def setup():
 	chrome_options = Options()
 	
-	chrome_options.add_argument('--headless')
+	# chrome_options.add_argument('--headless')
 	chrome_options.add_argument('user-agent=Mozilla/5.0 (iPad; CPU OS 7_0_4 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Mobile/11B554a')
 	# chrome_options.add_argument('--disable-extensions')
 	# chrome_options.add_argument('--profile-directory=Default')
@@ -25,7 +23,7 @@ def setup():
 	# chrome_options.add_argument('--disable-plugins-discovery')
 	# chrome_options.add_argument('--start-maximized')
 	# chrome_options.add_argument('enable-automation');
-	# chrome_options.add_argument('--window-size=1280,720');
+	chrome_options.add_argument('--window-size=960,1010');
 	# chrome_options.add_argument('start-maximized')
 	# chrome_options.add_argument('--no-sandbox');
 	# chrome_options.add_argument('--disable-extensions');
@@ -40,14 +38,19 @@ def setup():
 	'https://www.walmart.com/ip/Rag-Old-World-Style-Traditional-Sauce-24-oz/10291037',
 	'https://www.target.com/p/ragu-old-world-style-traditional-pasta-sauce-24oz/-/A-12935613#lnk=sametab'
 	]
-	# zipcodes = ['80002', '90210', '60007', '33716', '33603', '70032', '75001', '94016', '80031', '10017', '29401']
-	zipcodes = ['36101', '99801', '85001', '72201', '94203', '80201', '06101', '19901', '32301', '30301', '96801', '83701', '62701', '46201', '50301', '66601', '40601', '70801', '04330', '21401', '02108', '48901', '55101', '39201', '65101', '59601', '68501', '89701', '03301', '08601', '87501', '12201', '27601', '58501', '43201', '73101', '97301', '17101', '02901', '29201', '57501', '37201', '73301', '84101', '05601', '23218', '98501', '25301', '53701', '82001']
+	zipcodes = ['60007', '33716', '90210', '80002', '33603', '70032', '75001', '94016', '80031', '10017', '29401']
+	# zipcodes = ['36101', '99801', '85001', '72201', '94203', '80201', '06101', '19901', '32301', '30301', '96801', '83701', '62701', '46201', '50301', '66601', '40601', '70801', '04330', '21401', '02108', '48901', '55101', '39201', '65101', '59601', '68501', '89701', '03301', '08601', '87501', '12201', '27601', '58501', '43201', '73101', '97301', '17101', '02901', '29201', '57501', '37201', '73301', '84101', '05601', '23218', '98501', '25301', '53701', '82001']
 	retailers = ['amazon', 'walmart', 'target']
 
 	# generate dict using comprehension
 	# sku_data = {zipcode: {ret: '' for ret in retailers} for zipcode in zipcodes}
 	sku_data = {zipcode: {ret: {'price': 'null', 'delivery': 'null', 'pickup': 'null'} for ret in retailers} for zipcode in zipcodes}
+	print('')
+	print(100 * '-')
+	print('Generating Python dictionary...')
+	print('')
 	print(sku_data)
+	print('')
 
 	# generate dict
 	# for zip in zipcodes:
@@ -60,6 +63,7 @@ def setup():
 		for url in urls:
 			# print(f'grunting {url}')
 			driver = webdriver.Chrome(path, options=chrome_options)
+			driver.set_window_position(960, 0)
 			goGet(driver, zipcode, url, sku_data)
 
 	print('ALL DONE HERE!')
@@ -76,6 +80,7 @@ def goGet(driver, zipcode, url, sku_data):
 
 		for attempt in range(3):
 			try:
+				print(100 * '-')
 				print(f'Running Amazon routine in {zipcode}...')
 				driver.get(url)
 
@@ -93,6 +98,8 @@ def goGet(driver, zipcode, url, sku_data):
 				aprice = driver.find_element_by_id('priceblock_ourprice').text
 				adelivery = driver.find_element_by_xpath('//*[@id="almBuyBox_feature_div"]/div/div/div[1]/div/div[2]/div/span').text
 				print(f'{zipcode} AMAZON price: {aprice}')
+				print(f'{zipcode} AMAZON delivery: {adelivery}')
+				print(f'{zipcode} AMAZON pickup: Pickup not available')
 				driver.quit()
 				# sku_data[zipcode]['amazon'] = aprice
 				sku_data[zipcode][retailer]['price'] = aprice
@@ -103,6 +110,9 @@ def goGet(driver, zipcode, url, sku_data):
 			except Exception as e:
 				print('Bummer... something went wrong :(')
 				print(f'Re-try {attempt + 1}/3')
+				if attempt == 2:
+					print('Moving on...')
+					driver.quit()
 				# print(e)
 			else:
 				break
@@ -112,6 +122,7 @@ def goGet(driver, zipcode, url, sku_data):
 		retailer = 'walmart'
 		for attempt in range(3):
 			try:
+				print(100 * '-')
 				print(f'Running Walmart routine in {zipcode}...')
 				driver.get(url)
 				
@@ -138,6 +149,8 @@ def goGet(driver, zipcode, url, sku_data):
 				wpickup_c = driver.find_element_by_css_selector('.fulfillment-text > p').text
 				
 				print(f'{zipcode} WALMART price: ${pwhole}.{pfraction}')
+				print(f'{zipcode} WALMART delivery: {wdelivery}')
+				print(f'{zipcode} WALMART pickup: {wpickup_a}, {wpickup_c}')
 				driver.quit()
 				# blah_data.update({zipcode:{retailer:{
 				# 	'price' : f'{pwhole}.{pfraction}'
@@ -152,6 +165,9 @@ def goGet(driver, zipcode, url, sku_data):
 			except Exception as e:
 				print('Bummer... something went wrong :(')
 				print(f'Re-try {attempt + 1}/3')
+				if attempt == 2:
+					print('Moving on...')
+					driver.quit()
 				# print(e)
 			else:
 				break
@@ -161,6 +177,7 @@ def goGet(driver, zipcode, url, sku_data):
 		retailer = 'target'
 		for attempt in range(3):
 			try:
+				print(100 * '-')
 				print(f'Running Target routine in {zipcode}...')
 				driver.get(url)
 				trclick = WebDriverWait(driver, 10).until(
@@ -180,6 +197,8 @@ def goGet(driver, zipcode, url, sku_data):
 				tpickup_a = driver.find_element_by_xpath('//*[@id="viewport"]/div[5]/div/div[2]/div[3]/div[1]/div/div[1]/div/div[2]').text
 				tpickup_b = driver.find_element_by_css_selector('.cMLLLs').text
 				print(f'{zipcode} TARGET price: {tprice}')
+				print(f'{zipcode} TARGET delivery: {tdelivery_a}, {tdelivery_b}')
+				print(f'{zipcode} TARGET pickup: {tpickup_a} {tpickup_b}')
 				driver.quit()
 				# blah_data.update({zipcode:{retailer:{
 				# 	'price' : tprice
@@ -194,7 +213,12 @@ def goGet(driver, zipcode, url, sku_data):
 			except Exception as e:
 				print('Bummer... something went wrong :(')
 				print(f'Re-try {attempt + 1}/3')
+				if attempt == 2:
+					print('Moving on...')
+					driver.quit()
 			else:
 				break
 	else:
 		None
+
+setup()
