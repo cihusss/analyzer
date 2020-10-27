@@ -11,11 +11,13 @@ import json
 import sys
 from datetime import datetime
 
+start_time = time.time()
+
 # set up the browser and get url parameters
 def setup():
 	chrome_options = Options()
 	
-	# chrome_options.add_argument('--headless')
+	chrome_options.add_argument('--headless')
 	chrome_options.add_argument('user-agent=Mozilla/5.0 (iPad; CPU OS 7_0_4 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Mobile/11B554a')
 	# chrome_options.add_argument('--disable-extensions')
 	# chrome_options.add_argument('--profile-directory=Default')
@@ -23,7 +25,7 @@ def setup():
 	# chrome_options.add_argument('--disable-plugins-discovery')
 	# chrome_options.add_argument('--start-maximized')
 	# chrome_options.add_argument('enable-automation');
-	chrome_options.add_argument('--window-size=960,1010');
+	chrome_options.add_argument('--window-size=900,900');
 	# chrome_options.add_argument('start-maximized')
 	# chrome_options.add_argument('--no-sandbox');
 	# chrome_options.add_argument('--disable-extensions');
@@ -38,7 +40,9 @@ def setup():
 	'https://www.walmart.com/ip/Rag-Old-World-Style-Traditional-Sauce-24-oz/10291037',
 	'https://www.target.com/p/ragu-old-world-style-traditional-pasta-sauce-24oz/-/A-12935613#lnk=sametab'
 	]
-	zipcodes = ['60007', '33716', '90210', '80002', '33603', '70032', '75001', '94016', '80031', '10017', '29401']
+	zipcodes = [zipcode for zipcode in range(10001, 99950, 100)]
+	# zipcodes = ['60007']
+	# zipcodes = ['60007', '90293', '80002', '33603', '75001', '94016', '80031', '33716', '10017', '29401']
 	# zipcodes = ['36101', '99801', '85001', '72201', '94203', '80201', '06101', '19901', '32301', '30301', '96801', '83701', '62701', '46201', '50301', '66601', '40601', '70801', '04330', '21401', '02108', '48901', '55101', '39201', '65101', '59601', '68501', '89701', '03301', '08601', '87501', '12201', '27601', '58501', '43201', '73101', '97301', '17101', '02901', '29201', '57501', '37201', '73301', '84101', '05601', '23218', '98501', '25301', '53701', '82001']
 	retailers = ['amazon', 'walmart', 'target']
 
@@ -60,19 +64,28 @@ def setup():
 	# loops over zip codes
 	for idx, zipcode in enumerate(zipcodes):
 		# print(f'grunting {zipcode}')
+		sku_data_zip = {zipcode: {ret: {'price': 'null', 'delivery': 'null', 'pickup': 'null'} for ret in retailers}}
 		for url in urls:
 			# print(f'grunting {url}')
 			driver = webdriver.Chrome(path, options=chrome_options)
-			driver.set_window_position(960, 0)
-			goGet(driver, zipcode, url, sku_data)
+			driver.set_window_position(980, 80)
+			goGet(driver, zipcode, url, sku_data, retailers, sku_data_zip)
 
-	print('ALL DONE HERE!')
+		# print(f'PRINTING SKU_DATA_ZIP: {sku_data_zip}')
+		# with open(f'output/sku_data_{zipcode}.json', 'w', encoding='utf-8') as f:
+		# 	json.dump(sku_data_zip, f, ensure_ascii=False, indent=4)
 
-def goGet(driver, zipcode, url, sku_data):
+	print(100 * '-')
+	print(f'ALL DONE HERE in {round(time.time() - start_time)} seconds')
+
+def goGet(driver, zipcode, url, sku_data, retailers, sku_data_zip):
 	
 	# print(url)
-
 	# print(f'getting {zipcode} at {url}')
+
+	# global sku_data_zip
+	# sku_data_zip = {zipcode: {ret: {'price': 'null', 'delivery': 'null', 'pickup': 'null'} for ret in retailers}}
+	# print(sku_data_zip)
 
 	#amazon routine
 	if url.find('amazon') != -1:
@@ -83,12 +96,12 @@ def goGet(driver, zipcode, url, sku_data):
 				print(100 * '-')
 				print(f'Running Amazon routine in {zipcode}...')
 				driver.get(url)
-
+				driver.save_screenshot('screenshot_amz00.png')
 				driver.find_element_by_id('nav-global-location-slot').click()
 				time.sleep(1)
 				driver.find_element_by_id('GLUXZipUpdateInput').send_keys(zipcode)
 				driver.find_element_by_id('GLUXZipUpdateInput').send_keys(Keys.RETURN)
-				time.sleep(3)
+				time.sleep(2)
 				driver.save_screenshot('screenshot_amz01.png')
 				# driver.find_element_by_id('GLUXZipUpdateInput').send_keys(Keys.ESCAPE)
 				# driver.find_element_by_xpath('//*[@id="a-autoid-31-announce"]').click()
@@ -107,6 +120,14 @@ def goGet(driver, zipcode, url, sku_data):
 				sku_data[zipcode][retailer]['pickup'] = 'Pickup not available'
 				with open('output/sku_data.json', 'w', encoding='utf-8') as f:
 					json.dump(sku_data, f, ensure_ascii=False, indent=4)
+
+				sku_data_zip[zipcode][retailer]['price'] = aprice
+				sku_data_zip[zipcode][retailer]['delivery'] = adelivery
+				sku_data_zip[zipcode][retailer]['pickup'] = 'Pickup not available'
+				# print(f'PRINTING SKU_DATA_ZIP: {sku_data_zip}')
+				with open(f'output/sku_data_{zipcode}.json', 'w', encoding='utf-8') as f:
+					json.dump(sku_data_zip, f, ensure_ascii=False, indent=4)
+
 			except Exception as e:
 				print('Bummer... something went wrong :(')
 				print(f'Re-try {attempt + 1}/3')
@@ -162,6 +183,14 @@ def goGet(driver, zipcode, url, sku_data):
 				sku_data[zipcode][retailer]['pickup'] = f'{wpickup_a}, {wpickup_c}'
 				with open('output/sku_data.json', 'w', encoding='utf-8') as f:
 					json.dump(sku_data, f, ensure_ascii=False, indent=4)
+
+				sku_data_zip[zipcode][retailer]['price'] = f'${pwhole}.{pfraction}'
+				sku_data_zip[zipcode][retailer]['delivery'] = wdelivery
+				sku_data_zip[zipcode][retailer]['pickup'] = f'{wpickup_a}, {wpickup_c}'
+				# print(f'PRINTING SKU_DATA_ZIP: {sku_data_zip}')
+				with open(f'output/sku_data_{zipcode}.json', 'w', encoding='utf-8') as f:
+					json.dump(sku_data_zip, f, ensure_ascii=False, indent=4)
+
 			except Exception as e:
 				print('Bummer... something went wrong :(')
 				print(f'Re-try {attempt + 1}/3')
@@ -210,6 +239,14 @@ def goGet(driver, zipcode, url, sku_data):
 				sku_data[zipcode][retailer]['pickup'] = f'{tpickup_a} {tpickup_b}'
 				with open('output/sku_data.json', 'w', encoding='utf-8') as f:
 					json.dump(sku_data, f, ensure_ascii=False, indent=4)
+
+				sku_data_zip[zipcode][retailer]['price'] = tprice
+				sku_data_zip[zipcode][retailer]['delivery'] = f'{tdelivery_a}, {tdelivery_b}'
+				sku_data_zip[zipcode][retailer]['pickup'] = f'{tpickup_a} {tpickup_b}'
+				# print(f'PRINTING SKU_DATA_ZIP: {sku_data_zip}')
+				with open(f'output/sku_data_{zipcode}.json', 'w', encoding='utf-8') as f:
+					json.dump(sku_data_zip, f, ensure_ascii=False, indent=4)
+
 			except Exception as e:
 				print('Bummer... something went wrong :(')
 				print(f'Re-try {attempt + 1}/3')
